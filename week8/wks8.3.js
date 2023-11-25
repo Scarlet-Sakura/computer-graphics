@@ -65,7 +65,7 @@ window.onload = function init() {
   PLoc = gl.getUniformLocation(program, "PLoc");
   VLoc = gl.getUniformLocation(program, "VLoc");
 
-  P = perspective(90, 1.0, 0.1, 1000);
+  P = perspective(90, 1.0, 0.1, 10);
 
   var eye = vec3(0.0, 0.0, 0.0);
   var at = vec3(0.0, 0.0, 0.0);
@@ -143,7 +143,7 @@ window.onload = function init() {
     light[0] = radius * Math.sin(theta);
     light[2] = radius * Math.cos(theta) - 2;
     if (rotation) {
-      theta += 0.02;
+      theta += 0.01;
       if (theta > 2 * Math.PI) {
         theta -= 2 * Math.PI;
       }
