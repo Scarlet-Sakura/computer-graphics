@@ -13,7 +13,7 @@ window.onload = function init() {
   gl.viewport(0, 0, canvas.width, canvas.height); //convert from the clip space values to back into pixels
   gl.enable(gl.DEPTH_TEST); // Enable depth testing
   gl.enable(gl.CULL_FACE);
-  gl.frontFace(gl.CCW); // Adjust if needed (CCW or CW)
+  gl.frontFace(gl.CCW); // CAdjust if needed (CCW or CW)
   gl.depthFunc(gl.LESS); // Adjust if needed
 
   var program = initShaders(gl, "vertex-shader", "fragment-shader");
@@ -92,7 +92,7 @@ window.onload = function init() {
 
   var texture = gl.createTexture();
   gl.bindTexture(gl.TEXTURE_2D, texture);
-  var test = 0.0;
+  var test = 1.0;
   var shadow = gl.getUniformLocation(program, "visible");
   gl.uniform1f(shadow, test);
 
@@ -116,11 +116,10 @@ window.onload = function init() {
   console.log(myTexels);
   var texMapLoc = gl.getUniformLocation(program, "texMap");
   gl.uniform1i(texMapLoc, 0); // 0 is the texture unit you're using
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
 
   var stopButton = document.getElementById("stopButton");
   stopButton.addEventListener("click", function () {
@@ -151,6 +150,8 @@ window.onload = function init() {
     }
     gl.depthFunc(gl.GREATER);
     test = 1.0;
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     gl.uniform1f(shadow, test);
     // Model-view matrix for shadow then render
     V = mult(V, translate(light[0], light[1], light[2]));
@@ -192,12 +193,9 @@ window.onload = function init() {
       new Uint8Array([255, 0, 0])
     );
 
-    gl.generateMipmap(gl.TEXTURE_2D);
-    gl.texParameteri(
-      gl.TEXTURE_2D,
-      gl.TEXTURE_MIN_FILTER,
-      gl.NEAREST_MIPMAP_LINEAR
-    );
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
   }
 };
