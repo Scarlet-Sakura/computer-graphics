@@ -66,7 +66,7 @@ window.onload = function init() {
   PLoc = gl.getUniformLocation(program, "PLoc");
   VLoc = gl.getUniformLocation(program, "VLoc");
 
-  P = perspective(90, 1.0, 0.1, 10);
+  P = perspective(90, 1.0, 0.01, 100);
 
   var eye = vec3(0.0, 0.0, 0.0);
   var at = vec3(0.0, 0.0, 0.0);
