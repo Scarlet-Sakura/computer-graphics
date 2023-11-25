@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <script type="text/javascript" src="wks8.3.js"></script>
+  <script type="text/javascript" src="../webgl-utils.js"></script>
+  <script type="text/javascript" src="../MV.js"></script>
+  <script type="text/javascript" src="../initShaders.js"></script>
+  <script id="vertex-shader" type="x-shader/x-vertex">
+
+    attribute vec4 a_position;
+
+    uniform mat4 PLoc;
+    uniform mat4 VLoc;
+    uniform float visible;
+
+    attribute vec2 vTexCoord;
+    varying float shadow;
+    varying vec2 fTexCoord;
+
+    void main(){
+        fTexCoord = vTexCoord;
+        shadow = visible;
+        gl_Position = PLoc*VLoc*a_position;
+    }
+  </script>
+
+  <script id="fragment-shader" type="x-shader/x-fragment">
+    precision mediump float;
+    uniform sampler2D texMap;
+    varying vec2 fTexCoord;
+    varying float shadow;
+
+    void main(){
+        if(shadow==1.0){
+            gl_FragColor = vec4(0.0,0.0,0.0,1.0);
+        }
+        else{
+        gl_FragColor = texture2D(texMap,fTexCoord);}
+    }
+  </script>
+
+  <body>
+    <canvas id="canvas" width="512" height="512"></canvas>
+    <button id="stopButton">Toggle Rotation</button>
+  </body>
+</html>
