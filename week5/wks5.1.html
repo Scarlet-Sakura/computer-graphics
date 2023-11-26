@@ -23,22 +23,15 @@
       void
       main()
       {
-        vec4 pos = (MLoc*a_Position);
-        vec3 light = (u_View*lightPos).xyz;
-        N = normalize(NLoc*(a_Normal).xyz);
-        w_i = lightPos.w == 0.0 ? normalize(light) : normalize(light - pos.xyz);
-        w_r = 2.0 * (dot(w_i,N)) * N - w_i;
-        w_o = normalize(eyePoint - pos.xyz);
-
-
-
+      vec4 pos = (MLoc*a_Position);
+      vec3 light = (u_View*lightPos).xyz;
+      N = normalize(NLoc*(a_Normal).xyz);
+      w_i = lightPos.w == 0.0 ? normalize(light) : normalize(light - pos.xyz);
+      w_r = 2.0 * (dot(w_i,N)) * N - w_i;
+      w_o = normalize(eyePoint - pos.xyz);
       v_color = a_Color;
       gl_Position = u_Perspective * u_View  * pos;
-
-
-
-
-              }
+      }
   </script>
 
   <script id="fragment-shader" type="x-shader/x-fragment">
@@ -55,21 +48,17 @@
     void
     main()
 
-    {
-        vec4 fColor;
-        float Kd = max(dot(w_i, N), 0.0);
-        float Ks = pow(max(dot(w_r,w_o),0.0),s);
+  {
+      vec4 fColor;
+      float Kd = max(dot(w_i, N), 0.0);
+      float Ks = pow(max(dot(w_r,w_o),0.0),s);
 
-        vec4 diffuse = Kd*Le*kd;
-        vec4 specular = Ks*Le*ks;
-        vec4 ambient = Le*ka;
-
-
-
-
-        fColor = ambient + diffuse + specular;
-        fColor.a = v_color.a;
-        gl_FragColor = fColor;
+      vec4 diffuse = Kd*Le*kd;
+      vec4 specular = Ks*Le*ks;
+      vec4 ambient = Le*ka;
+      fColor = ambient + diffuse + specular;
+      fColor.a = v_color.a;
+      gl_FragColor = fColor;
     }
   </script>
   <script type="text/javascript" src="wks5.1.js"></script>

@@ -26,7 +26,7 @@ window.onload = function init() {
   ks = gl.getUniformLocation(gl.program, "ks");
   s = gl.getUniformLocation(gl.program, "s");
 
-  var model = initObject(gl, "potion_version.obj", 0.8);
+  var model = initObject(gl, "new_cupcake.obj", 0.8);
 
   function initObject(gl, obj_filename, scale) {
     gl.program.a_Position = gl.getAttribLocation(gl.program, "a_Position");
@@ -155,8 +155,6 @@ window.onload = function init() {
   console.log(N);
   var L_emi = vec4(1.0, 0.0, 0.0, 1.0); // light emission
   var le = vec4(0.0, 0.0, -1.0, 0.0); // light direction
-
-  //var directionToLight = vec4(0, 0, 1, 1);
 
   var k_d = vec4(0.25, 0.25, 0.25, 1); // Diffuse Reflection Coefficient
   var k_a = vec4(0.2, 0.2, 0.2, 1); // Ambiend Reflection Coefficient
