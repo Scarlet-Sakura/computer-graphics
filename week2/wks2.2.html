@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <script id="vertex-shader" type="x-shader/x-vertex">
+        attribute vec4 a_position;
+        
+        attribute vec4 a_color;
+        
+        varying vec4 v_color;
+        void
+        main()
+        {   
+            gl_PointSize = 10.0;
+            gl_Position = a_position;
+            v_color = a_color;
+        }
+        </script>
+        
+        <script id="fragment-shader" type="x-shader/x-fragment">
+        precision mediump float;
+        varying vec4 v_color;
+        void
+        main()
+        {
+            gl_FragColor = v_color;
+        }
+        </script>
+
+<script type="text/javascript" src="wks2.2.js"></script>
+<script type ="text/javascript" src="webgl-utils.js"></script>
+<script type ="text/javascript" src="MV.js"></script>
+<script type ="text/javascript" src="initShaders.js"></script>
+
+
+
+<body>
+<select id="mymenu" size = "3">
+    <option value = "0">Orange</option>
+    <option value = "1">Purple</option>
+    <option value = "2">Green</option>
+</select></p> 
+<select id="colormenu" size = "3">
+    <option value = "0">Black</option>
+    <option value = "1">Magenta</option>
+    <option value = "2">Cyan</option>
+</select>
+<button id ="pointsButton">Draw Points</button>
+
+
+<canvas id="canvas" width="512" height="512"></canvas>
+</body></html>
