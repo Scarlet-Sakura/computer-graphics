@@ -21,34 +21,26 @@
     void
     main()
     {
+      vec4 pos = (MLoc*a_position);
+      vec3 light = (VLoc*lightPos).xyz;
+      N = normalize(NLoc*(vNormal).xyz);
+      w_i = lightPos.w == 0.0 ? normalize(light) : normalize(light - pos.xyz);
 
+      gl_Position = PLoc*VLoc*pos;
+      float Kd = max(dot(w_i, N), 0.0);
 
-                vec4 pos = (MLoc*a_position);
-                vec3 light = (VLoc*lightPos).xyz;
-                N = normalize(NLoc*(vNormal).xyz);
-                w_i = lightPos.w == 0.0 ? normalize(light) : normalize(light - pos.xyz);
+      vec4 diffuse = Kd*diffuseProduct;
+      v_color = diffuse;
 
-                gl_Position = PLoc*VLoc*pos;
-                //gl_Position.z = -gl_Position.z;
-
-                float Kd = max(dot(w_i, N), 0.0);
-
-                vec4 diffuse = Kd*diffuseProduct;
-                v_color = diffuse;
-
-
-
-            }
+    }
   </script>
 
   <script id="fragment-shader" type="x-shader/x-fragment">
     precision mediump float;
     varying vec4 v_color;
-
     void
     main()
     {
-
         gl_FragColor = v_color;
     }
   </script>
@@ -56,14 +48,13 @@
   <p></p>
   <button id="Button1">Increase Subdivisions</button>
   <button id="Button2">Decrease Subdivisions</button>
-  <button id="Button3">Rotate View</button>
 
   <p></p>
 
   <script type="text/javascript" src="wks4.3.js"></script>
-  <script type="text/javascript" src="webgl-utils.js"></script>
-  <script type="text/javascript" src="MV.js"></script>
-  <script type="text/javascript" src="initShaders.js"></script>
+  <script type ="text/javascript" src="..\common\webgl-utils.js"></script>
+  <script type ="text/javascript" src="..\common\MV.js"></script>
+  <script type ="text/javascript" src="..\common\initShaders.js"></script>
 
   <body>
     <canvas id="canvas" width="512" height="512"></canvas>
