@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <script id="vertex-shader" type="x-shader/x-vertex">
+
+    attribute vec4 a_position;
+
+    uniform mat4 PLoc;
+    uniform mat4 VLoc;
+
+    attribute vec2 vTexCoord;
+
+    varying vec2 fTexCoord;
+
+    void main(){
+        fTexCoord = vTexCoord;
+        gl_Position = PLoc*VLoc*a_position;
+    }
+  </script>
+
+  <script id="fragment-shader" type="x-shader/x-fragment">
+    precision mediump float;
+    uniform sampler2D texMap;
+    varying vec2 fTexCoord;
+
+    void main(){
+        gl_FragColor = texture2D(texMap,fTexCoord);
+    }
+  </script>
+
+  <script type="text/javascript" src="wk6.1.js"></script>
+  <script type="text/javascript" src="webgl-utils.js"></script>
+  <script type="text/javascript" src="MV.js"></script>
+  <script type="text/javascript" src="initShaders.js"></script>
+
+  <body>
+    <canvas id="canvas" width="512" height="512"></canvas>
+  </body>
+</html>

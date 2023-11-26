@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <script id="vertex-shader" type="x-shader/x-vertex">
+
+    attribute vec4 a_position;
+
+    uniform mat4 PLoc;
+    uniform mat4 VLoc;
+
+    attribute vec2 vTexCoord;
+
+    varying vec2 fTexCoord;
+
+    void main(){
+        fTexCoord = vTexCoord;
+        gl_Position = PLoc*VLoc*a_position;
+    }
+  </script>
+
+  <script id="fragment-shader" type="x-shader/x-fragment">
+    precision mediump float;
+    uniform sampler2D texMap;
+    varying vec2 fTexCoord;
+
+    void main(){
+        gl_FragColor = texture2D(texMap,fTexCoord);
+    }
+  </script>
+
+  <script type="text/javascript" src="wk6.2.js"></script>
+  <script type="text/javascript" src="webgl-utils.js"></script>
+  <script type="text/javascript" src="MV.js"></script>
+  <script type="text/javascript" src="initShaders.js"></script>
+
+  <body>
+    <label for="menu1">Texture Wrapping Models</label>
+    <select id="menu1">
+      <option value="option1">Repeat</option>
+      <option value="option2">Clamp-to-edge</option>
+    </select>
+
+    <br /><br />
+
+    <label for="menu2">Texture Filtering Modes</label>
+    <select id="menu2">
+      <option value="choice1">Nearest</option>
+      <option value="choice2">Linear</option>
+      <option value="choice3">Nearest MipMap Nearest</option>
+      <option value="choice4">Linear MipMap Nearest</option>
+      <option value="choice5">Nearest MipMap Linear</option>
+      <option value="choice6">Linear MipMap Linear</option>
+    </select>
+    <canvas id="canvas" width="512" height="512"></canvas>
+  </body>
+</html>
