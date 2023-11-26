@@ -49,6 +49,7 @@ window.onload= function init(){
     c.addEventListener("click", function() {
         cIndex = c.selectedIndex;
     });
+
     //event listener for points 
     //enable  choice for points first 
     var pointButton = document.getElementById("pointButton");
@@ -63,11 +64,9 @@ window.onload= function init(){
                 -1 + 2 * (canvas.height - (event.clientY-offsetY)) / canvas.height);
             gl.bufferSubData(gl.ARRAY_BUFFER, sizeof['vec2'] * index, flatten(t));
             
-    
             color = vec4(colors[cIndex])
             gl.bindBuffer(gl.ARRAY_BUFFER,cBuffer);
             gl.bufferSubData(gl.ARRAY_BUFFER,sizeof['vec4'] * index, flatten(color));
-            
             
             index++;
             render();
