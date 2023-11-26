@@ -13,7 +13,7 @@ window.onload= function init(){
     console.log('Warning: Unable to use an extension');
     }
     
-    gl.clearColor(1.0,1.0,1.0, 1.0);
+    gl.clearColor(0.0,1.0,1.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
    
     //convert from the clip space values to back into pixels 
@@ -31,7 +31,7 @@ window.onload= function init(){
         vec3(0.0, 1.0, 0.0),
         vec3(1.0, 1.0, 0.0),
         vec3(1.0, 0.0, 0.0),
- ];
+    ];
     var wire_indices = new Uint32Array([
         0, 1, 1, 2, 2, 3, 3, 0, 
         2, 3, 3, 7, 7, 6, 6, 2, 
@@ -39,7 +39,7 @@ window.onload= function init(){
         1, 2, 2, 6, 6, 5, 5, 1, 
         4, 5, 5, 6, 6, 7, 7, 4, 
         0, 1, 1, 5, 5, 4, 4, 0 
-        ]);
+    ]);
 
    var indices = new Uint32Array([
     1,0,3,3,2,1,
@@ -50,30 +50,21 @@ window.onload= function init(){
     5,4,0,0,1,5
    ]);
 
-   const eye = vec3(2.0,2.0,2.0);
-   const at = vec3(1.0,1.0,1.0);
+   const at= vec3(1.0,1.0,1.0);
+   const eye = vec3(0.0,0.0,0.0);
    const up = vec3(1.0,1.0,0.0);
-   
-   var theta = [0, 0, 0];
 
-    var xAxis = 0;
-    var yAxis = 1;
-    var zAxis = 2;
-    var axis = 0;
-   
-   
    var V = lookAt(eye, at, up);
    var VLoc = gl.getUniformLocation(program,"VLoc");
    gl.uniformMatrix4fv(VLoc, false, flatten(V));
- 
 
-
-   
-
+   var P = ortho(-2.0,2.0,-2.0,2.0,-2.0,2.0);
+   var PLoc = gl.getUniformLocation(program,"PLoc");
+   gl.uniformMatrix4fv(PLoc,false,flatten(P));
 
    var iBuffer = gl.createBuffer();
    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,iBuffer);
-   //gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(wire_indices),gl.STATIC_DRAW);
+   gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(wire_indices),gl.STATIC_DRAW);
 
    var vBuffer = gl.createBuffer();
    gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
@@ -83,24 +74,5 @@ window.onload= function init(){
    gl.vertexAttribPointer(vPosition, 3, gl.FLOAT, false, 0, 0);
    gl.enableVertexAttribArray(vPosition);
  
-
-   //gl.drawElements(gl.LINES,wire_indices.length,gl.UNSIGNED_INT,0);
-
-   gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint32Array(indices),gl.STATIC_DRAW);
-   
-    function render()
-    {
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    theta[axis] += 2.0;
-    V = rotateX(theta[xAxis]);
-    V = mult(V, rotateY(theta[yAxis]));
-    V = mult(V, rotateZ(theta[zAxis]));
-    gl.uniformMatrix4fv(VLoc, false, flatten(V));
-   
-    gl.drawArrays(gl.TRIANGLES, 0, wire_indices.length);
-    requestAnimFrame(render);
-    }
-
-   //gl.drawElements(gl.TRIANGLES,indices.length, gl.UNSIGNED_INT,0);
-  render();
+   gl.drawElements(gl.LINES,wire_indices.length,gl.UNSIGNED_INT,0);
 }

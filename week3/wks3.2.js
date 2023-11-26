@@ -22,8 +22,6 @@ window.onload = function init() {
   }
 
   gl.clearColor(0.7, 0.0, 0.5, 1.0);
-  //gl.clear(gl.COLOR_BUFFER_BIT);
-
   //convert from the clip space values to back into pixels
   gl.viewport(0, 0, canvas.width, canvas.height);
   // Enable depth testing
@@ -63,9 +61,6 @@ window.onload = function init() {
     5, 6, 6, 7, 4, 5, 4, 0, 0, 1, 5,
   ]);
 
-  //gl.uniformMatrix4fv(VLoc, false, flatten(V));
-
-  var iBuffer = gl.createBuffer();
   var iBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBuffer);
   gl.bufferData(
@@ -82,17 +77,8 @@ window.onload = function init() {
   gl.vertexAttribPointer(vPosition, 3, gl.FLOAT, false, 0, 0);
   gl.enableVertexAttribArray(vPosition);
 
-  //gl.drawElements(gl.LINES,wire_indices.length,gl.UNSIGNED_INT,0);
-
   PLoc = gl.getUniformLocation(program, "PLoc");
-
-  //var P = rotateZ(45);
-  //P = mult(rotateY(45),P);
-  //P = mult(rotateX(45),P);
-  //gl.uniformMatrix4fv(PLoc, false, flatten(P));
-
   VLoc = gl.getUniformLocation(program, "VLoc");
-
   TLoc = gl.getUniformLocation(program, "TLoc");
 
   document.getElementById("Button1").onclick = function () {
@@ -117,9 +103,6 @@ window.onload = function init() {
     render(wire_indices.length);
   };
 
-  //gl.drawElements(gl.TRIANGLES,indices.length, gl.UNSIGNED_INT,0);
-
-  //gl.drawElements(gl.LINES,wire_indices.length, gl.UNSIGNED_INT,0);
 };
 var render = function (num) {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -132,15 +115,11 @@ var render = function (num) {
     radius * Math.cos(theta)
   );
 
-  tMatrix = translate(dx, dy, -1.0);
-
-  var t_neg = translate(at);
-
-  mvMatrix = lookAt(eye, at, up); // modelview
-  pMatrix = perspective(45, 1.0, 0.1, 10);
-  console.log(eye);
+  tMatrix = translate(dx, dy, -1.0);//translate
+  mvMatrix = lookAt(eye, at, up); // view
+  pMatrix = perspective(45, 1.0, 0.1, 10); //projection matrix
+  //console.log(eye);
   gl.uniformMatrix4fv(TLoc, false, flatten(tMatrix));
-
   gl.uniformMatrix4fv(VLoc, false, flatten(mvMatrix));
   gl.uniformMatrix4fv(PLoc, false, flatten(pMatrix));
 
