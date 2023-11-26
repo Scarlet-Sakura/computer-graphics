@@ -26,25 +26,27 @@
         </script>
 
 <script type="text/javascript" src="wks2.2.js"></script>
-<script type ="text/javascript" src="webgl-utils.js"></script>
-<script type ="text/javascript" src="MV.js"></script>
-<script type ="text/javascript" src="initShaders.js"></script>
-
-
+<script type ="text/javascript" src="..\common\webgl-utils.js"></script>
+<script type ="text/javascript" src="..\common\MV.js"></script>
+<script type ="text/javascript" src="..\common\initShaders.js"></script>
 
 <body>
-<select id="mymenu" size = "3">
-    <option value = "0">Orange</option>
+<canvas id="canvas" width="512" height="512"></canvas>
+<p></p>
+<button type="button" id ="clearButton">Background</button>
+<label for = "mymenu">Choose Background Color:</label>
+<select id="mymenu" >
+    <option value = "0" selected >Orange</option>
     <option value = "1">Purple</option>
     <option value = "2">Green</option>
-</select></p> 
-<select id="colormenu" size = "3">
-    <option value = "0">Black</option>
+</select>
+<br>
+<button type="button" id ="pointButton">Draw Points</button>
+<label for = "colormenu">Choose Points Color:</label>
+<select id="colormenu" >
+    <option value = "0" selected >Black</option>
     <option value = "1">Magenta</option>
     <option value = "2">Cyan</option>
 </select>
-<button id ="pointsButton">Draw Points</button>
 
-
-<canvas id="canvas" width="512" height="512"></canvas>
 </body></html>
