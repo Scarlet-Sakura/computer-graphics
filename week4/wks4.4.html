@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+  <script id="vertex-shader" type="x-shader/x-vertex">
+    attribute vec4 a_position;
+    varying vec4 v_position;
+    varying vec4 pos;
+    attribute vec4 a_color;
+    attribute vec4 vNormal;
+    uniform mat4 PLoc;
+    uniform mat4 VLoc;
+    uniform mat4 MLoc;
+    uniform mat3 NLoc;
+    uniform vec4 Le; //Light emission
+    uniform vec4 kd; //diffuse comp
+    uniform vec4 ka; //ambient comp
+    uniform vec4 ks; //specular comp
+    uniform float s; //shininess
+
+    uniform vec4 lightPos; // pl , w_i -> normalize(-pl)
+    varying vec4 v_color;
+    varying vec3 N;
+    varying vec3 w_i;
+    varying vec3 w_r;
+    varying vec3 w_o;
+    uniform vec3 eyePoint;
+
+
+
+    void
+    main()
+    {
+
+
+                vec4 pos = (MLoc*a_position);
+                vec3 light = (VLoc*lightPos).xyz;
+                N = normalize(NLoc*(vNormal).xyz);
+                w_i = lightPos.w == 0.0 ? normalize(light) : normalize(light - pos.xyz);
+                w_r = 2.0 * (dot(w_i,N)) * N - w_i;
+                w_o = normalize(eyePoint - pos.xyz);
+
+                gl_Position = PLoc*VLoc*pos;
+                //gl_Position.z = -gl_Position.z;
+
+                float Kd = max(dot(w_i, N), 0.0);
+                float Ks = pow(max(dot(w_r,w_o),0.0),s);
+
+                vec4 diffuse = Kd*Le*kd;
+                vec4 specular = Ks*Le*ks;
+                vec4 ambient = Le*ka;
+
+                v_color = diffuse + specular;
+
+
+
+            }
+  </script>
+
+  <script id="fragment-shader" type="x-shader/x-fragment">
+    precision mediump float;
+    varying vec4 v_color;
+
+    void
+    main()
+    {
+
+        gl_FragColor = v_color;
+    }
+  </script>
+
+  <style>
+    /* Style for the container div */
+    .slider-container {
+      float: left; /* Float the container to the right */
+      margin-right: 10px; /* Add some right margin for spacing */
+    }
+
+    /* Style for the list items */
+    ul li {
+      list-style: none; /* Remove the default list bullet */
+      margin-bottom: 10px; /* Add some bottom margin for spacing between items */
+    }
+
+    /* Style for the sliders */
+    input[type="range"] {
+      width: 100px; /* Set the width of the sliders */
+      float: right; /* Float the sliders to the right */
+    }
+  </style>
+
+  <div class="slider-container">
+    <ul>
+      <li>
+        kd 0
+        <input
+          class="slide"
+          type="range"
+          id="kd"
+          min="0"
+          max="1"
+          step="0.1"
+          value="0.0"
+        />
+        1
+      </li>
+      <li>
+        ks 0
+        <input
+          class="slide"
+          type="range"
+          id="ks"
+          min="0"
+          max="1"
+          step="0.1"
+          value="0.0"
+        />
+        1
+      </li>
+      <li>
+        ka 0
+        <input
+          class="slide"
+          type="range"
+          id="ka"
+          min="0"
+          max="1"
+          step="0.1"
+          value="0.0"
+        />
+        1
+      </li>
+      <li>
+        s 0
+        <input
+          class="slide"
+          type="range"
+          id="s"
+          min="0.0"
+          max="1.0e3"
+          step="0.1"
+          value="0.0"
+        />
+        1e3
+      </li>
+      <p></p>
+      <li><button id="Button1">Increase Subdivisions</button></li>
+
+      <li><button id="Button2">Decrease Subdivisions</button></li>
+      <li><button id="Button3">Rotate View</button></li>
+
+      <p></p>
+    </ul>
+  </div>
+
+  <script type="text/javascript" src="wks4.4.js"></script>
+  <script type="text/javascript" src="webgl-utils.js"></script>
+  <script type="text/javascript" src="MV.js"></script>
+  <script type="text/javascript" src="initShaders.js"></script>
+
+  <body>
+    <canvas id="canvas" width="512" height="512"></canvas>
+  </body>
+</html>
