@@ -36,6 +36,14 @@ window.onload= function init(){
 
     });
 
+    var circleButton = document.getElementById("circleButton");
+    circleButton.addEventListener("click", function() { 
+        drawMode = 2; 
+        formerPoints = [];
+        formerColors = [];
+    });
+
+    
     //colors for points
     var colors = [
         vec4(0.0,0.0,0.0,1.0),
@@ -82,6 +90,56 @@ window.onload= function init(){
         }
     }
 
+    function Circle(x,y){
+        formerPoints.push(vec2(x,y));
+        var currentColor= colors[cIndex];
+        formerColors.push(currentColor)
+        if(formerPoints.length == 2){
+            var CircleColor = [];
+            var  h = (formerPoints[0][0]+formerPoints[1][0])/2;
+            var k = (formerPoints[0][1]+formerPoints[1][1])/2
+            var center = vec2(k,h);
+            var dx = formerPoints[1][0] - formerPoints[0][0];
+            var dy = formerPoints[1][1] - formerPoints[0][1];
+            var radius = Math.sqrt(dx * dx + dy * dy);
+            var centerColor = formerColors[1];
+            var sideColor = formerColors[0];
+            var vertices = [];
+            var numSegments = 100;
+            // Calculate angular spacing between vertices
+            var angleIncrement = (2 * Math.PI) / numSegments;
+
+            // Create vertices for the circle
+            for (var i = 0; i <= numSegments; i++) {
+                vertices.push(center);
+                CircleColor.push(centerColor);
+                
+                var angle1 = i * angleIncrement;
+                var angle2 = (i + 1) * angleIncrement;
+    
+                var x1 = center[0] + radius * Math.cos(angle1);
+                var y1 = center[1] + radius * Math.sin(angle1);
+                var x2 = center[0] + radius * Math.cos(angle2);
+                var y2 = center[1] + radius * Math.sin(angle2);
+    
+            vertices.push(vec2(x1, y1));
+            CircleColor.push(sideColor);
+            vertices.push(vec2(x2, y2));
+            CircleColor.push(sideColor);
+            
+            
+            }
+            gl.bufferSubData(gl.ARRAY_BUFFER, index * sizeof["vec2"], flatten(vertices));
+            gl.bufferSubData(gl.ARRAY_BUFFER, max_points * sizeof["vec2"] + index * sizeof["vec4"], flatten(CircleColor));
+            index += numSegments*3;
+            formerPoints = [];
+            formerColors = [];
+           
+
+        }
+            
+
+    }
     
     var program = initShaders(gl, "vertex-shader", "fragment-shader")
     gl.useProgram(program)
@@ -140,7 +198,9 @@ window.onload= function init(){
                 break;
             case 1:
                 Triangle(x, y);
-                break;  
+                break;
+            case 2:
+                Circle(x,y);   
             default:
                 break;
         }
