@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <script id="vertex-shader" type="x-shader/x-vertex">
+      attribute vec4 a_Position;
+      attribute vec4 a_Normal;
+      attribute vec4 a_Color;
+      attribute vec2 a_Textures;
+      uniform mat4 MLoc;
+      uniform mat3 NLoc;
+
+    uniform mat4 u_View;
+    uniform mat4 u_Perspective;
+    uniform mat4 u_Translation;
+    varying vec3 N;
+    varying vec3 w_i;
+    varying vec3 w_r;
+    varying vec3 w_o;
+    uniform vec3 eyePoint;
+    uniform vec4 lightPos;
+
+      varying vec4 v_color;
+
+      void
+      main()
+      {
+        vec4 pos = (MLoc*a_Position);
+        vec3 light = (u_View*lightPos).xyz;
+        N = normalize(NLoc*(a_Normal).xyz);
+        w_i = lightPos.w == 0.0 ? normalize(light) : normalize(light - pos.xyz);
+        w_r = 2.0 * (dot(w_i,N)) * N - w_i;
+        w_o = normalize(eyePoint - pos.xyz);
+
+
+
+      v_color = a_Color;
+      gl_Position = u_Perspective * u_View  * pos;
+
+
+
+
+              }
+  </script>
+
+  <script id="fragment-shader" type="x-shader/x-fragment">
+    precision mediump float;
+    varying vec4 v_color;
+    uniform vec4 kd; //diffuse comp
+    uniform vec4 ka; //ambient comp
+    uniform vec4 ks; //specular comp
+    uniform float s; //shininess
+    varying vec3 N;
+    varying vec3 w_i,w_r,w_o;
+    uniform vec4 Le; //Light emissio
+
+    void
+    main()
+
+    {
+        vec4 fColor;
+        float Kd = max(dot(w_i, N), 0.0);
+        float Ks = pow(max(dot(w_r,w_o),0.0),s);
+
+        vec4 diffuse = Kd*Le*kd;
+        vec4 specular = Ks*Le*ks;
+        vec4 ambient = Le*ka;
+
+
+
+
+        fColor = ambient + diffuse + specular;
+        fColor.a = v_color.a;
+        gl_FragColor = fColor;
+    }
+  </script>
+  <script type="text/javascript" src="final.js"></script>
+
+  <script type="text/javascript" src="common/webgl-utils.js"></script>
+  <script type="text/javascript" src="common/MV.js"></script>
+  <script type="text/javascript" src="common/initShaders.js"></script>
+  <script type="text/javascript" src="common/OBJParser.js"></script>
+  <body>
+    <canvas id="canvas" width="512" height="512"></canvas>
+    <button id="toggleRotation">Toggle Rotation</button>
+  </body>
+</html>
