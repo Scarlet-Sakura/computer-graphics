@@ -26,7 +26,7 @@ window.onload = function init() {
   ks = gl.getUniformLocation(gl.program, "ks");
   s = gl.getUniformLocation(gl.program, "s");
 
-  var model = initObject(gl, "new_cupcake.obj", 0.8);
+  var model = initObject(gl, "potion_version.obj", 0.8);
 
   function initObject(gl, obj_filename, scale) {
     gl.program.a_Position = gl.getAttribLocation(gl.program, "a_Position");
@@ -141,7 +141,7 @@ window.onload = function init() {
 
   var P = perspective(45, 1, 0.1, 100);
   var V = lookAt(vec3(0, 0, 4), vec3(0, 0, 0), vec3(0, 1, 0));
-  var T = translate(0, 0, 0);
+  var T = translate(-1, -1, 0.0);
   var M = mat4();
 
   // Apply rotations
@@ -153,7 +153,7 @@ window.onload = function init() {
 
   N = normalMatrix(M, true);
   console.log(N);
-  var L_emi = vec4(1.0, 0.0, 0.0, 1.0); // light emission
+  var L_emi = vec4(0.0, 0.0, 0.8, 1.0); // light emission - I change it to bluish
   var le = vec4(0.0, 0.0, -1.0, 0.0); // light direction
 
   var k_d = vec4(0.25, 0.25, 0.25, 1); // Diffuse Reflection Coefficient
