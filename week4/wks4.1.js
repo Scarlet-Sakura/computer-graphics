@@ -1,13 +1,9 @@
 "use strict";
 var gl;
 var canvas;
-
 var V, M, P;
-
 var VLoc, PLoc, MLoc;
-
 var R, T, S;
-
 var pointsArray = [];
 var numDivide = 1;
 var vBuffer;
@@ -41,11 +37,7 @@ window.onload = function init() {
   var vPosition = gl.getAttribLocation(program, "a_position");
   gl.vertexAttribPointer(vPosition, 4, gl.FLOAT, false, 0, 0);
   gl.enableVertexAttribArray(vPosition);
-
-  var vColor = gl.getAttribLocation(program, "a_color");
-  gl.vertexAttribPointer(vColor, 4, gl.FLOAT, false, 0, 0);
-  gl.enableVertexAttribArray(vColor);
-
+  
   PLoc = gl.getUniformLocation(program, "PLoc");
   VLoc = gl.getUniformLocation(program, "VLoc");
   MLoc = gl.getUniformLocation(program, "MLoc");
@@ -78,7 +70,6 @@ window.onload = function init() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     modelMatrix();
-
     gl.uniformMatrix4fv(MLoc, false, flatten(M));
     gl.uniformMatrix4fv(PLoc, false, flatten(P));
     gl.uniformMatrix4fv(VLoc, false, flatten(V));
