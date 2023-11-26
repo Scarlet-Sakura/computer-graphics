@@ -26,7 +26,7 @@ window.onload = function init() {
   ks = gl.getUniformLocation(gl.program, "ks");
   s = gl.getUniformLocation(gl.program, "s");
 
-  var model = initObject(gl, "./flamealien.obj", 0.4);
+  var model = initObject(gl, "potion_version.obj", 0.4);
 
   function initObject(gl, obj_filename, scale) {
     gl.program.a_Position = gl.getAttribLocation(gl.program, "a_Position");
