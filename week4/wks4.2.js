@@ -1,13 +1,9 @@
 "use strict";
 var gl;
 var canvas;
-
 var V, M, P;
-
 var VLoc, PLoc, MLoc;
-
 var R, T, S;
-
 var pointsArray = [];
 var numDivide = 1;
 var vBuffer;
@@ -43,10 +39,6 @@ window.onload = function init() {
   var vPosition = gl.getAttribLocation(program, "a_position");
   gl.vertexAttribPointer(vPosition, 4, gl.FLOAT, false, 0, 0);
   gl.enableVertexAttribArray(vPosition);
-
-  var vColor = gl.getAttribLocation(program, "a_color");
-  gl.vertexAttribPointer(vColor, 4, gl.FLOAT, false, 0, 0);
-  gl.enableVertexAttribArray(vColor);
 
   PLoc = gl.getUniformLocation(program, "PLoc");
   VLoc = gl.getUniformLocation(program, "VLoc");
@@ -89,6 +81,7 @@ window.onload = function init() {
 
     gl.drawArrays(gl.TRIANGLES, 0, num);
   }
+  
   function tetrahedron(vert, n) {
     divideTriangle(vert[0], vert[1], vert[2], n);
     divideTriangle(vert[3], vert[2], vert[1], n);

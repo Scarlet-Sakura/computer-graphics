@@ -7,25 +7,18 @@
     uniform mat4 PLoc;
     uniform mat4 VLoc;
     uniform mat4 MLoc;
-    varying vec4 v_color;
-
 
     void
     main()
     {
+      gl_Position = PLoc*VLoc*MLoc*a_position;
+      v_position = a_position;
 
-
-                gl_Position = PLoc*VLoc*MLoc*a_position;
-                gl_Position.z = -gl_Position.z;
-                v_color = a_color;
-                v_position = a_position;
-
-            }
+    }
   </script>
 
   <script id="fragment-shader" type="x-shader/x-fragment">
     precision mediump float;
-    varying vec4 v_color;
     varying vec4 v_position;
     void
     main()
@@ -40,9 +33,9 @@
 
   <p></p>
   <script type="text/javascript" src="wks4.2.js"></script>
-  <script type="text/javascript" src="webgl-utils.js"></script>
-  <script type="text/javascript" src="MV.js"></script>
-  <script type="text/javascript" src="initShaders.js"></script>
+  <script type ="text/javascript" src="..\common\webgl-utils.js"></script>
+  <script type ="text/javascript" src="..\common\MV.js"></script>
+  <script type ="text/javascript" src="..\common\initShaders.js"></script>
 
   <body>
     <canvas id="canvas" width="512" height="512"></canvas>
