@@ -66,7 +66,6 @@ window.onload = function init() {
   //gl.uniformMatrix4fv(VLoc, false, flatten(V));
 
   var iBuffer = gl.createBuffer();
-  var iBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBuffer);
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
