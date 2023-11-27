@@ -89,7 +89,7 @@ window.onload = function init() {
 
     switch (selectedOption) {
       case "option1":
-        // Set texture parameters for repeat
+        // texture parameters for repeat
 
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
@@ -97,7 +97,7 @@ window.onload = function init() {
         break;
 
       case "option2":
-        // Set texture parameters for clamp to edge
+        //  texture parameters for clamp to edge
 
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
@@ -119,7 +119,7 @@ window.onload = function init() {
 
     switch (selectedOption) {
       case "choice1":
-        // Set texture parameters for nearest
+        // texture parameters for nearest
 
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
@@ -127,14 +127,14 @@ window.onload = function init() {
         break;
 
       case "choice2":
-        // Set texture parameters for linear
+        //  texture parameters for linear
 
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 
         break;
       case "choice3":
-        // Set texture parameters for nearest mipmap nearest
+        // texture parameters for nearest mipmap nearest
 
         gl.texParameteri(
           gl.TEXTURE_2D,
@@ -149,7 +149,7 @@ window.onload = function init() {
 
         break;
       case "choice4":
-        // Set texture parameters for linear mipmap nearest
+        // texture parameters for linear mipmap nearest
 
         gl.texParameteri(
           gl.TEXTURE_2D,
@@ -165,7 +165,7 @@ window.onload = function init() {
         break;
 
       case "choice5":
-        // Set texture parameters for nearest mipmap linear
+        // texture parameters for nearest mipmap linear
 
         gl.texParameteri(
           gl.TEXTURE_2D,
@@ -181,7 +181,7 @@ window.onload = function init() {
         break;
 
       case "choice6":
-        // Set texture parameters for linear mipmap linear
+        // texture parameters for linear mipmap linear
 
         gl.texParameteri(
           gl.TEXTURE_2D,

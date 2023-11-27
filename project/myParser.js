@@ -54,7 +54,7 @@ OBJDoc.prototype.parse = function (fileString, scale, reverse) {
           var object = this.parseObjectName(sp);
           this.objects.push(object);
           currentObject = object;
-          console.log(this.objects);
+          //console.log(this.objects);
         }
         continue; // Go to the next line
       case "v": // Read vertex
@@ -320,7 +320,7 @@ OBJDoc.prototype.getDrawingInfo = function () {
   var index_indices = 0;
   for (var i = 0; i < this.objects.length; i++) {
     var object = this.objects[i];
-    console.log(object);
+    //console.log(object);
     for (var j = 0; j < object.faces.length; j++) {
       var face = object.faces[j];
       var color = this.findColor(face.materialName);
@@ -348,7 +348,7 @@ OBJDoc.prototype.getDrawingInfo = function () {
          
           texCoords[index_indices*2 + 0] = texCoord.u;
           texCoords[index_indices*2 + 1] = texCoord.v;
-          console.log(texCoords);
+          //console.log(texCoords);
         }
         //console.log(texCoords);
         // Copy normal
