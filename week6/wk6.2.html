@@ -3,11 +3,10 @@
   <script id="vertex-shader" type="x-shader/x-vertex">
 
     attribute vec4 a_position;
+    attribute vec2 vTexCoord;
 
     uniform mat4 PLoc;
     uniform mat4 VLoc;
-
-    attribute vec2 vTexCoord;
 
     varying vec2 fTexCoord;
 
@@ -28,19 +27,20 @@
   </script>
 
   <script type="text/javascript" src="wk6.2.js"></script>
-  <script type="text/javascript" src="webgl-utils.js"></script>
-  <script type="text/javascript" src="MV.js"></script>
-  <script type="text/javascript" src="initShaders.js"></script>
+  <script type ="text/javascript" src="..\common\webgl-utils.js"></script>
+  <script type ="text/javascript" src="..\common\MV.js"></script>
+  <script type ="text/javascript" src="..\common\initShaders.js"></script>
 
   <body>
+    <canvas id="canvas" width="512" height="512"></canvas>
+    <br>
     <label for="menu1">Texture Wrapping Models</label>
     <select id="menu1">
       <option value="option1">Repeat</option>
       <option value="option2">Clamp-to-edge</option>
     </select>
 
-    <br /><br />
-
+    <br>
     <label for="menu2">Texture Filtering Modes</label>
     <select id="menu2">
       <option value="choice1">Nearest</option>
@@ -50,6 +50,6 @@
       <option value="choice5">Nearest MipMap Linear</option>
       <option value="choice6">Linear MipMap Linear</option>
     </select>
-    <canvas id="canvas" width="512" height="512"></canvas>
+    
   </body>
 </html>

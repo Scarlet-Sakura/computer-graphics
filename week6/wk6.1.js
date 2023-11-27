@@ -87,7 +87,7 @@ window.onload = function init() {
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
 
   var texMapLoc = gl.getUniformLocation(program, "texMap");
-  gl.uniform1i(texMapLoc, 0); // 0 is the texture unit you're using
+  gl.uniform1i(texMapLoc, 0); 
   render(gl);
 };
 

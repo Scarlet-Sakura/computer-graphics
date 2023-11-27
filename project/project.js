@@ -19,7 +19,7 @@ window.onload = function init() {
   gl.program = initShaders(gl, "vertex-shader", "fragment-shader");
 
   gl.useProgram(gl.program);
-  var model = initObject(gl, "new_cupcake.obj", 0.8);
+  var model = initObject(gl, "cupcake.obj", 0.8);
   lightPos = gl.getUniformLocation(gl.program, "lightPos");
   Le = gl.getUniformLocation(gl.program, "Le");
   ka = gl.getUniformLocation(gl.program, "ka");
@@ -120,34 +120,20 @@ window.onload = function init() {
   function onReadComplete(gl, model, objDoc) {
     // Acquire the vertex coordinates and colors from OBJ file
     var drawingInfo = objDoc.getDrawingInfo();
-
     //taking the mmaterial
-    //Kd specifies diffuse Color
+  
     console.log(objDoc.mtls);
-    //var k_d = objDoc.mtls[0].KdMaterials[0].color;
+    
     var k_s = objDoc.mtls[0].KsMaterials[0].color;
     var k_a = objDoc.mtls[0].KaMaterials[0].color;
 
-    //var diffuseColor = vec4(k_d.r, k_d.g, k_d.b, 1.0);
     var ambientColor = vec4(k_a.r, k_a.g, k_a.b, 1.0);
     var specularColor = vec4(k_s.r, k_s.g, k_s.b, 1.0);
+
     gl.uniform4fv(ka, flatten(ambientColor));
     gl.uniform4fv(ks, flatten(specularColor));
-    //gl.uniform4fv(kd, flatten(diffuseColor));
-    //console.log("Vertices:", drawingInfo.vertices);
-    //console.log("Normals:", drawingInfo.normals);
-    //console.log("Colors:", drawingInfo.colors);
-    //console.log("Textures:", drawingInfo.texCoords);
-    //console.log("Indices:", drawingInfo.indices);
-    console.log(drawingInfo);
-    // console.log(diffuseColor);
-    // console.log("Colors:", drawingInfo.colors);
-
-    // Write date into the buffer object
-
-    // Write the indices to the buffer object
-
-    // Write date into the buffer object
+    
+    // Write data into the buffer object
     gl.bindBuffer(gl.ARRAY_BUFFER, model.vertexBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, drawingInfo.vertices, gl.STATIC_DRAW);
 
@@ -202,9 +188,6 @@ window.onload = function init() {
 
   var perspectiveMatrix = gl.getUniformLocation(gl.program, "u_Perspective");
   gl.uniformMatrix4fv(perspectiveMatrix, false, flatten(P));
-
-  var translationMatrix = gl.getUniformLocation(gl.program, "u_Translation");
-  gl.uniformMatrix4fv(translationMatrix, false, flatten(T));
 
   var image = document.getElementById("potion");
   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);

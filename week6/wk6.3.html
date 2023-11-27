@@ -2,44 +2,37 @@
 <html>
   <script id="vertex-shader" type="x-shader/x-vertex">
     attribute vec4 a_position;
-    varying vec4 v_position;
-    varying vec4 pos;
     attribute vec4 a_color;
     attribute vec4 vNormal;
+
+    varying vec4 v_position;
+    varying vec4 pos;
+    varying vec4 v_color;
+    varying vec3 N;
+    varying vec3 w_i;
+    varying vec4 normal;
+  
     uniform mat4 PLoc;
     uniform mat4 VLoc;
     uniform mat4 MLoc;
     uniform mat3 NLoc;
     uniform vec4 diffuseProduct;
     uniform vec4 lightPos; // pl , w_i -> normalize(-pl)
-    varying vec4 v_color;
-    varying vec3 N;
-    varying vec3 w_i;
-    varying vec4 normal;
-
-
 
     void
     main()
     {
+      vec4 pos = (MLoc*a_position);
+      vec3 light = (VLoc*lightPos).xyz;
+      N = normalize(NLoc*(vNormal).xyz);
+      w_i = lightPos.w == 0.0 ? normalize(light) : normalize(light - pos.xyz);
 
+      gl_Position = PLoc*VLoc*pos;
 
-                vec4 pos = (MLoc*a_position);
-                vec3 light = (VLoc*lightPos).xyz;
-                N = normalize(NLoc*(vNormal).xyz);
-                w_i = lightPos.w == 0.0 ? normalize(light) : normalize(light - pos.xyz);
+      float Kd = max(dot(w_i, N), 0.0);
+      normal = vNormal;
 
-                gl_Position = PLoc*VLoc*pos;
-                //gl_Position.z = -gl_Position.z;
-
-                float Kd = max(dot(w_i, N), 0.0);
-
-
-                normal = vNormal;
-
-
-
-            }
+    }
   </script>
 
   <script id="fragment-shader" type="x-shader/x-fragment">
@@ -50,15 +43,12 @@
 
     void
     main()
-    {   vec2 vTexCoord;
+    {  
+      vec2 vTexCoord;
 
-       vTexCoord.x = 1.0 - atan(normal.z, normal.x)/(2.0 * 3.14);
-       vTexCoord.y = acos(normal.y)/3.14;
-       gl_FragColor = texture2D(texMap, vTexCoord);
-
-       //use the color found by texture look up as kd and ka of the sphere
-      // vec4 diffuse = Kd*diffuseProduct;
-      // v_color = diffuse;
+      vTexCoord.x = 1.0 - atan(normal.z, normal.x)/(2.0 * 3.14);
+      vTexCoord.y = acos(normal.y)/3.14;
+      gl_FragColor = texture2D(texMap, vTexCoord);
     }
   </script>
 
@@ -70,9 +60,9 @@
   <p></p>
 
   <script type="text/javascript" src="wk6.3.js"></script>
-  <script type="text/javascript" src="webgl-utils.js"></script>
-  <script type="text/javascript" src="MV.js"></script>
-  <script type="text/javascript" src="initShaders.js"></script>
+  <script type ="text/javascript" src="..\common\webgl-utils.js"></script>
+  <script type ="text/javascript" src="..\common\MV.js"></script>
+  <script type ="text/javascript" src="..\common\initShaders.js"></script>
 
   <body>
     <canvas id="canvas" width="512" height="512"></canvas>
