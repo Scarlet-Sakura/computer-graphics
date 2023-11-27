@@ -4,19 +4,15 @@ var canvas;
 var g_tex_ready = 0;
 var V, M, P;
 var eye;
-
-var VLoc, PLoc, MLoc, NLoc, lightPos, diffuseProduct;
-
+var VLoc, PLoc, MLoc;
 var R, T, S, N;
-
 var pointsArray = [];
 var normalArray = [];
-var numDivide = 1;
+var numDivide = 4;
 var vBuffer;
 var nBuffer;
 
 var theta = 0.05;
-
 const radius = 5.0;
 var dr = 5 * (Math.PI / 180);
 
@@ -59,49 +55,14 @@ window.onload = function init() {
   PLoc = gl.getUniformLocation(program, "PLoc");
   VLoc = gl.getUniformLocation(program, "VLoc");
   MLoc = gl.getUniformLocation(program, "MLoc");
-  NLoc = gl.getUniformLocation(program, "NLoc");
-  lightPos = gl.getUniformLocation(program, "lightPos");
-  diffuseProduct = gl.getUniformLocation(program, "diffuseProduct");
 
   const at = vec3(0.0, 0.0, 0.0);
   const up = vec3(0.0, 1.0, 0.0);
-
-  var L_emi = vec4(1.0, 1.0, 1.0, 1.0); // light emission
-  var le = vec4(0.0, 0.0, -1.0, 0.0); // light direction
-
-  //var directionToLight = vec4(0, 0, 1, 1);
-
-  var kd = vec4(0.25, 0.25, 0.25, 1); // Diffuse Reflection Coefficient
-  var ka = 0.5; // Ambiend Reflection Coefficient
-
-  var diffuse = mult(kd, L_emi);
-
-  gl.uniform4fv(lightPos, le);
-  gl.uniform4fv(diffuseProduct, diffuse);
 
   P = perspective(45, 1.0, 0.1, 10);
 
   tetrahedron(vertices, numDivide);
   initTexture(gl);
-
-  document.getElementById("Button1").onclick = function () {
-    if (numDivide > 10) numDivide = 10;
-    numDivide++;
-    pointsArray = [];
-    normalArray = [];
-    init();
-  };
-  document.getElementById("Button2").onclick = function () {
-    if (numDivide) numDivide--;
-    pointsArray = [];
-    normalArray = [];
-    init();
-  };
-
-  document.getElementById("Button3").onclick = function () {
-    theta += dr;
-    render();
-  };
 
   function initTexture(gl) {
     var cubemap = [
@@ -144,24 +105,30 @@ window.onload = function init() {
     gl.uniform1i(texMapLoc, 0);
   }
 
+  var toggleButton = document.getElementById("toggleButton");
+  var rotationPaused = false; // Variable to track whether rotation is paused
+
+ 
+   toggleButton.addEventListener("click", function() {
+    rotationPaused = !rotationPaused; 
+    if (!rotationPaused) {
+        // If rotation is not paused, start rendering
+        render();
+    }
+});
+
   function render() {
     gl.clearColor(0.4, 0.1, 0.5, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
+    theta+=dr;
     eye = vec3(radius * Math.sin(theta), 0, radius * Math.cos(theta));
     console.log(eye);
     modelMatrix();
     V = lookAt(eye, at, up);
-    N = normalMatrix(M, true);
-
-    console.log(normalArray);
-    console.log(N);
 
     gl.uniformMatrix4fv(MLoc, false, flatten(M));
     gl.uniformMatrix4fv(PLoc, false, flatten(P));
     gl.uniformMatrix4fv(VLoc, false, flatten(V));
-    gl.uniformMatrix3fv(NLoc, false, flatten(N));
-
     gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, flatten(normalArray), gl.STATIC_DRAW);
 
@@ -169,6 +136,11 @@ window.onload = function init() {
     gl.bufferData(gl.ARRAY_BUFFER, flatten(pointsArray), gl.STATIC_DRAW);
 
     gl.drawArrays(gl.TRIANGLES, 0, pointsArray.length);
+
+    if (rotationPaused) {
+      return;
+    }
+    requestAnimationFrame(render);
   }
   function tetrahedron(vert, n) {
     divideTriangle(vert[0], vert[1], vert[2], n);
@@ -196,7 +168,6 @@ window.onload = function init() {
       pointsArray.push(b);
       pointsArray.push(c);
 
-      // normalArray.push(cross(subtract(b, a), subtract(c, a)));
       normalArray.push(vec4(a[0], a[1], a[2], 0.0));
       normalArray.push(vec4(b[0], b[1], b[2], 0.0));
       normalArray.push(vec4(c[0], c[1], c[2], 0.0));

@@ -2,70 +2,46 @@
 <html>
   <script id="vertex-shader" type="x-shader/x-vertex">
     attribute vec4 a_position;
-    varying vec4 v_position;
-    varying vec4 pos;
-    attribute vec4 a_color;
     attribute vec4 vNormal;
+
     uniform mat4 PLoc;
     uniform mat4 VLoc;
     uniform mat4 MLoc;
-    uniform mat3 NLoc;
-    uniform vec4 diffuseProduct;
-    uniform vec4 lightPos; // pl , w_i -> normalize(-pl)
-    varying vec4 v_color;
-    varying vec3 N;
-    varying vec3 w_i;
+
     varying vec4 normal;
-
-
+    varying vec4 pos;
 
     void
     main()
     {
+      vec4 pos = (MLoc*a_position);
+      gl_Position = PLoc*VLoc*pos;
+      normal = vNormal;
 
-
-                vec4 pos = (MLoc*a_position);
-
-
-                gl_Position = PLoc*VLoc*pos;
-
-
-                normal = vNormal;
-
-
-
-            }
+    }
   </script>
 
   <script id="fragment-shader" type="x-shader/x-fragment">
     precision mediump float;
-    varying vec4 v_color;
     varying vec4 normal;
     uniform samplerCube texMap;
 
     void
     main()
-    {   vec2 vTexCoord;
-
-
-       gl_FragColor = textureCube(texMap,normal.xyz);
+    {   
+      vec2 vTexCoord;
+      gl_FragColor = textureCube(texMap,normal.xyz);
 
     }
   </script>
 
-  <p></p>
-  <button id="Button1">Increase Subdivisions</button>
-  <button id="Button2">Decrease Subdivisions</button>
-  <button id="Button3">Rotate View</button>
-
-  <p></p>
-
   <script type="text/javascript" src="wks7.1.js"></script>
-  <script type="text/javascript" src="../webgl-utils.js"></script>
-  <script type="text/javascript" src="../MV.js"></script>
-  <script type="text/javascript" src="../initShaders.js"></script>
+  <script type ="text/javascript" src="..\common\webgl-utils.js"></script>
+  <script type ="text/javascript" src="..\common\MV.js"></script>
+  <script type ="text/javascript" src="..\common\initShaders.js"></script>
 
   <body>
     <canvas id="canvas" width="512" height="512"></canvas>
+    <button id="toggleButton">Toggle Rotation</button>
   </body>
 </html>

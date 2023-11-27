@@ -95,6 +95,18 @@ window.onload = function init() {
     gl.LINEAR_MIPMAP_LINEAR
   );
 
+  var toggleButton = document.getElementById("toggleButton");
+  var rotationPaused = false; // Variable to track whether rotation is paused
+
+ 
+  toggleButton.addEventListener("click", function() {
+    rotationPaused = !rotationPaused; 
+    if (!rotationPaused) {
+        // If rotation is not paused, start rendering
+        render();
+    }
+  });
+
   render();
 
   function render() {
@@ -122,6 +134,9 @@ window.onload = function init() {
     gl.bufferData(gl.ARRAY_BUFFER, flatten(pointsArray), gl.STATIC_DRAW);
 
     gl.drawArrays(gl.TRIANGLES, 0, pointsArray.length);
+    if (rotationPaused) {
+      return;
+    }
     requestAnimationFrame(render);
   }
   function tetrahedron(vert, n) {
