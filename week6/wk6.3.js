@@ -1,22 +1,16 @@
 "use strict";
 var gl;
 var canvas;
-
 var V, M, P;
 var eye;
-
-var VLoc, PLoc, MLoc, NLoc, lightPos, diffuseProduct;
-
+var VLoc, PLoc, MLoc, NLoc, lightPos, Le;
 var R, T, S, N;
-
 var pointsArray = [];
 var normalArray = [];
-var numDivide = 1;
+var numDivide = 5;
 var vBuffer;
 var nBuffer;
-
 var theta = 0.05;
-
 const radius = 5.0;
 var dr = 5 * (Math.PI / 180);
 
@@ -61,7 +55,7 @@ window.onload = function init() {
   MLoc = gl.getUniformLocation(program, "MLoc");
   NLoc = gl.getUniformLocation(program, "NLoc");
   lightPos = gl.getUniformLocation(program, "lightPos");
-  diffuseProduct = gl.getUniformLocation(program, "diffuseProduct");
+  Le = gl.getUniformLocation(program,"Le");
 
   const at = vec3(0.0, 0.0, 0.0);
   const up = vec3(0.0, 1.0, 0.0);
@@ -69,15 +63,8 @@ window.onload = function init() {
   var L_emi = vec4(1.0, 1.0, 1.0, 1.0); // light emission
   var le = vec4(0.0, 0.0, -1.0, 0.0); // light direction
 
-  //var directionToLight = vec4(0, 0, 1, 1);
-
-  var kd = vec4(0.25, 0.25, 0.25, 1); // Diffuse Reflection Coefficient
-  var ka = 0.5; // Ambiend Reflection Coefficient
-
-  var diffuse = mult(kd, L_emi);
-
   gl.uniform4fv(lightPos, le);
-  gl.uniform4fv(diffuseProduct, diffuse);
+  gl.uniform4fv(Le, L_emi);
 
   P = perspective(45, 1.0, 0.1, 10);
 
@@ -99,38 +86,21 @@ window.onload = function init() {
 
   gl.texParameteri(
     gl.TEXTURE_2D,
-    gl.TEXTURE_MIN_FILTER,
-    gl.NEAREST_MIPMAP_NEAREST
+    gl.TEXTURE_MAG_FILTER,
+    gl.LINEAR_MIPMAP_LINEAR
   );
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+  gl.texParameteri(
+    gl.TEXTURE_2D,
+    gl.TEXTURE_MIN_FILTER,
+    gl.LINEAR_MIPMAP_LINEAR
+  );
 
   render();
-
-  document.getElementById("Button1").onclick = function () {
-    if (numDivide > 10) numDivide = 10;
-    numDivide++;
-    pointsArray = [];
-    normalArray = [];
-    init();
-  };
-  document.getElementById("Button2").onclick = function () {
-    if (numDivide) numDivide--;
-    pointsArray = [];
-    normalArray = [];
-    init();
-  };
-
-  document.getElementById("Button3").onclick = function () {
-    theta += dr;
-    render();
-  };
-
-  console.log();
 
   function render() {
     gl.clearColor(0.4, 0.1, 0.5, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
+    theta += dr;
     eye = vec3(radius * Math.sin(theta), 0, radius * Math.cos(theta));
     console.log(eye);
     modelMatrix();
@@ -152,6 +122,7 @@ window.onload = function init() {
     gl.bufferData(gl.ARRAY_BUFFER, flatten(pointsArray), gl.STATIC_DRAW);
 
     gl.drawArrays(gl.TRIANGLES, 0, pointsArray.length);
+    requestAnimationFrame(render);
   }
   function tetrahedron(vert, n) {
     divideTriangle(vert[0], vert[1], vert[2], n);
