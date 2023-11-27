@@ -19,7 +19,7 @@ window.onload = function init() {
   gl.program = initShaders(gl, "vertex-shader", "fragment-shader");
 
   gl.useProgram(gl.program);
-  var model = initObject(gl, "./new_cupcake.obj", 1.0);
+  var model = initObject(gl, "new_cupcake.obj", 0.8);
   lightPos = gl.getUniformLocation(gl.program, "lightPos");
   Le = gl.getUniformLocation(gl.program, "Le");
   ka = gl.getUniformLocation(gl.program, "ka");

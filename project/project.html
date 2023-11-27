@@ -68,10 +68,6 @@
         //vec4 diffuse = Kd*Le*kd;
         vec4 specular = Ks*Le*ks;
         vec4 ambient = Le*ka;
-
-
-
-
         fColor = ambient+ specular;
         fColor.a = v_color.a;
        // gl_FragColor = fColor;
@@ -85,9 +81,9 @@
   </script>
   <script type="text/javascript" src="project.js"></script>
 
-  <script type="text/javascript" src="common/webgl-utils.js"></script>
-  <script type="text/javascript" src="common/MV.js"></script>
-  <script type="text/javascript" src="common/initShaders.js"></script>
+  <script type="text/javascript" src="..\common/webgl-utils.js"></script>
+  <script type="text/javascript" src="..\common/MV.js"></script>
+  <script type="text/javascript" src="..\common/initShaders.js"></script>
   <script type="text/javascript" src="myParser.js"></script>
   <body>
     <canvas id="canvas" width="512" height="512"></canvas>

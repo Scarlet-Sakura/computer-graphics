@@ -158,7 +158,7 @@ window.onload = function init() {
 
   var k_d = vec4(0.25, 0.25, 0.25, 1); // Diffuse Reflection Coefficient
   var k_a = vec4(0.2, 0.2, 0.2, 1); // Ambiend Reflection Coefficient
-  var k_s = vec4(0.0,0.0,0.0,1.0);
+  var k_s = vec4(0.5, 0.5, 0.5, 1);
   var shininess = 100;
 
   gl.uniform4fv(Le, L_emi);
