@@ -2,28 +2,24 @@
 <html>
   <script id="vertex-shader" type="x-shader/x-vertex">
     attribute vec4 a_position;
+
+    varying vec4 vTexCoord;
     varying vec4 pos;
-    attribute vec4 a_color;
+
     uniform mat4 PLoc;
     uniform mat4 VLoc;
     uniform mat4 MLoc;
-    uniform mat3 NLoc;
     uniform mat4 TLoc; //meaning the texture matrix i use for the quad
-    varying vec4 vTexCoord;
-
-
 
     void
     main()
     {
-        vec4 pos = (MLoc*a_position);
+      vec4 pos = (MLoc*a_position);
 
-        gl_Position = PLoc*VLoc*pos;
+      gl_Position = PLoc*VLoc*pos;
 
-        vTexCoord = TLoc * a_position;
-
-
-            }
+      vTexCoord = TLoc * a_position;
+    }
   </script>
 
   <script id="fragment-shader" type="x-shader/x-fragment">
@@ -34,15 +30,13 @@
     void
     main()
     {
-       gl_FragColor = textureCube(texMap,vTexCoord.xyz);
+      
+      gl_FragColor = textureCube(texMap,vTexCoord.xyz);
 
     }
   </script>
   <head>
     <p></p>
-    <button id="Button1" class="style">Increase Subdivisions</button>
-    <button id="Button2" class="style">Decrease Subdivisions</button>
-    <button id="Button3" class="style">Rotate View</button>
 
     <p></p>
     <style>
@@ -52,11 +46,12 @@
     </style>
   </head>
   <script type="text/javascript" src="wks7.2.js"></script>
-  <script type="text/javascript" src="../webgl-utils.js"></script>
-  <script type="text/javascript" src="../MV.js"></script>
-  <script type="text/javascript" src="../initShaders.js"></script>
+  <script type ="text/javascript" src="..\common\webgl-utils.js"></script>
+  <script type ="text/javascript" src="..\common\MV.js"></script>
+  <script type ="text/javascript" src="..\common\initShaders.js"></script>
 
   <body>
     <canvas id="canvas" width="512" height="512"></canvas>
+    <button id="toggleButton">Toggle Rotation</button>
   </body>
 </html>

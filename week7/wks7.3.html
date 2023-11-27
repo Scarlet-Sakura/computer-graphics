@@ -2,20 +2,20 @@
 <html>
   <script id="vertex-shader" type="x-shader/x-vertex">
     attribute vec4 a_position;
+    attribute vec4 vNormal;
+
     varying vec4 pos;
-    attribute vec4 a_color;
+    varying vec4 eye;
+    varying vec4 directionIncidence;
+    varying vec4 normal;
+    varying vec4 vTexCoord;
+
     uniform mat4 PLoc;
     uniform mat4 VLoc;
     uniform mat4 MLoc;
-    uniform mat3 NLoc;
-    uniform mat4 TLoc; //meaning the texture matrix i use for the quad
-    varying vec4 vTexCoord;
+    uniform mat4 TLoc;
     uniform vec3 eye_position;
-    varying vec4 eye;
-    varying vec4 directionIncidence;
-    attribute vec4 vNormal;
-    varying vec4 normal;
-
+  
     void
     main()
     {
@@ -66,11 +66,12 @@
     </style>
   </head>
   <script type="text/javascript" src="wks7.3.js"></script>
-  <script type="text/javascript" src="../webgl-utils.js"></script>
-  <script type="text/javascript" src="../MV.js"></script>
-  <script type="text/javascript" src="../initShaders.js"></script>
+  <script type ="text/javascript" src="..\common\webgl-utils.js"></script>
+  <script type ="text/javascript" src="..\common\MV.js"></script>
+  <script type ="text/javascript" src="..\common\initShaders.js"></script>
 
   <body>
     <canvas id="canvas" width="512" height="512"></canvas>
+    <button id="toggleButton">Toggle Rotation</button>
   </body>
 </html>

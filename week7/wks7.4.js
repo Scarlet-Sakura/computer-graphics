@@ -6,10 +6,8 @@ var V, M, P;
 var eye;
 var eye_position; //variable to pass the uniform
 var reflective_index; //for distinguish reflective objects
-var VLoc, PLoc, MLoc, NLoc, TLoc;
-
+var VLoc, PLoc, MLoc, TLoc;
 var R, T, S, Tex;
-
 var pointsArray = [];
 var vBuffer;
 var normalArray = [];
@@ -56,12 +54,10 @@ window.onload = function init() {
     vec4(1.0, 1.0, 0.999, 1.0),
     vec4(-1.0, 1.0, 0.999, 1.0),
   ];
-  //Array = pointsArray.concat(quad_vertices);
 
   PLoc = gl.getUniformLocation(gl.program, "PLoc");
   VLoc = gl.getUniformLocation(gl.program, "VLoc");
   MLoc = gl.getUniformLocation(gl.program, "MLoc");
-  NLoc = gl.getUniformLocation(gl.program, "NLoc");
   TLoc = gl.getUniformLocation(gl.program, "TLoc");
   reflective_index = gl.getUniformLocation(gl.program, "reflective");
 
@@ -72,31 +68,10 @@ window.onload = function init() {
 
   P = perspective(90, 1.0, 1.0, 100);
 
-  document.getElementById("Button1").onclick = function () {
-    if (numDivide > 10) numDivide = 10;
-    numDivide++;
-    pointsArray = [];
-
-    render(gl);
-  };
-  document.getElementById("Button2").onclick = function () {
-    if (numDivide) numDivide--;
-    pointsArray = [];
-
-    render(gl);
-  };
-
-  document.getElementById("Button3").onclick = function () {
-    theta += dr;
-
-    render(gl);
-  };
-
   initTexture(gl);
 
   if (flag.loaded) {
     initTexture_sphere(gl);
-    //createSphere(gl, numDivide);
   }
   console.log(flag.loaded);
 

@@ -6,10 +6,8 @@ var V, M, P;
 var eye;
 var eye_position; //variable to pass the uniform
 var reflective_index; //for distinguish reflective objects
-var VLoc, PLoc, MLoc, NLoc, TLoc;
-
+var VLoc, PLoc, MLoc, TLoc;
 var R, T, S, Tex;
-
 var pointsArray = [];
 var vBuffer;
 var normalArray = [];
@@ -65,10 +63,8 @@ window.onload = function init() {
   PLoc = gl.getUniformLocation(program, "PLoc");
   VLoc = gl.getUniformLocation(program, "VLoc");
   MLoc = gl.getUniformLocation(program, "MLoc");
-  NLoc = gl.getUniformLocation(program, "NLoc");
   TLoc = gl.getUniformLocation(program, "TLoc");
   reflective_index = gl.getUniformLocation(program, "reflective");
-
   eye_position = gl.getUniformLocation(program, "eye_position");
 
   const at = vec3(0.0, 0.0, 0.0);
@@ -77,26 +73,6 @@ window.onload = function init() {
   P = perspective(90, 1.0, 1.0, 100);
 
   initTexture(gl);
-
-  document.getElementById("Button1").onclick = function () {
-    if (numDivide > 10) numDivide = 10;
-    numDivide++;
-    pointsArray = [];
-
-    render(gl);
-  };
-  document.getElementById("Button2").onclick = function () {
-    if (numDivide) numDivide--;
-    pointsArray = [];
-
-    render(gl);
-  };
-
-  document.getElementById("Button3").onclick = function () {
-    theta += dr;
-
-    render(gl);
-  };
 
   function initTexture(gl) {
     var cubemap = [
@@ -133,7 +109,7 @@ window.onload = function init() {
           image
         );
         ++g_tex_ready;
-        if (g_tex_ready >= 6) render(gl);
+        if (g_tex_ready >= 6) render();
       };
       image.src = cubemap[i];
     }
@@ -141,15 +117,24 @@ window.onload = function init() {
 
     gl.uniform1i(texMapLoc, 0);
   }
+  var toggleButton = document.getElementById("toggleButton");
+  var rotationPaused = false; // Variable to track whether rotation is paused
 
-  function render(gl) {
+ 
+  toggleButton.addEventListener("click", function() {
+    rotationPaused = !rotationPaused; 
+    if (!rotationPaused) {
+        // If rotation is not paused, start rendering
+        render();
+    }
+ });
+
+
+  function render() {
     gl.clearColor(0.4, 0.1, 0.5, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
+    theta+=dr;
     eye = vec3(radius * Math.sin(theta), 0, radius * Math.cos(theta));
-
-    console.log(eye);
-
     V = lookAt(eye, at, up);
 
     //extract the rotation part from the view matrix
@@ -209,6 +194,11 @@ window.onload = function init() {
     gl.uniformMatrix4fv(TLoc, false, flatten(mat4()));
     gl.uniform1i(reflective_index, 1);
     gl.drawArrays(gl.TRIANGLES, 0, pointsArray.length);
+
+    if (rotationPaused) {
+      return;
+    }
+    requestAnimationFrame(render);
   }
 
   function createSphere(gl, numTimesToSubdivide) {
@@ -260,7 +250,6 @@ window.onload = function init() {
       pointsArray.push(b);
       pointsArray.push(c);
 
-      // normalArray.push(cross(subtract(b, a), subtract(c, a)));
       normalArray.push(vec4(a[0], a[1], a[2], 0.0));
       normalArray.push(vec4(b[0], b[1], b[2], 0.0));
       normalArray.push(vec4(c[0], c[1], c[2], 0.0));
