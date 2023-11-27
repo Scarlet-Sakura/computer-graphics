@@ -61,6 +61,11 @@ OBJDoc.prototype.parse = function (fileString, scale, reverse) {
         var vertex = this.parseVertex(sp, scale);
         this.vertices.push(vertex);
         continue; // Go to the next line
+      case "vt": // Read texture coordinates
+      var texture = this.parseTexture(sp);
+      //console.log(texture.u, texture.v);
+      this.textures.push(texture);
+      continue;
       case "vn": // Read normal
         var normal = this.parseNormal(sp);
         this.normals.push(normal);
@@ -68,12 +73,6 @@ OBJDoc.prototype.parse = function (fileString, scale, reverse) {
       case "usemtl": // Read Material name
         currentMaterialName = this.parseUsemtl(sp);
         continue; // Go to the next line
-
-      case "vt": // Read texture coordinates
-        var texture = this.parseTexture(sp);
-        // console.log(texture.u, texture.v);
-        this.textures.push(texture);
-        continue;
       case "f": // Read face
         var face = this.parseFace(
           sp,
@@ -200,7 +199,7 @@ OBJDoc.prototype.parseFace = function (sp, materialName, vertices, reverse) {
     var n = face.vIndices.length - 2;
     var newVIndices = new Array(n * 3);
     var newNIndices = new Array(n * 3);
-    var newTIndices = new Array(n * 2);
+    var newTIndices = new Array(n * 3);
     for (var i = 0; i < n; i++) {
       newVIndices[i * 3 + 0] = face.vIndices[0];
       newVIndices[i * 3 + 1] = face.vIndices[i + 1];
@@ -208,8 +207,9 @@ OBJDoc.prototype.parseFace = function (sp, materialName, vertices, reverse) {
       newNIndices[i * 3 + 0] = face.nIndices[0];
       newNIndices[i * 3 + 1] = face.nIndices[i + 1];
       newNIndices[i * 3 + 2] = face.nIndices[i + 2];
-      newTIndices[i * 2 + 0] = face.tIndices[0];
-      newTIndices[i * 2 + 1] = face.tIndices[i + 1];
+      newTIndices[i * 3 + 0] = face.tIndices[0];
+      newTIndices[i * 3 + 1] = face.tIndices[i + 1];
+      newTIndices[i * 3 + 2] = face.tIndices[i + 2];
     }
     face.vIndices = newVIndices;
     face.nIndices = newNIndices;
@@ -326,48 +326,48 @@ OBJDoc.prototype.getDrawingInfo = function () {
       var color = this.findColor(face.materialName);
       var faceNormal = face.normal;
       for (var k = 0; k < face.vIndices.length; k++) {
-        // Set index
         indices[index_indices] = index_indices;
-        // Copy vertex
         var vIdx = face.vIndices[k];
+  
         var vertex = this.vertices[vIdx];
-        vertices[index_indices * 3 + 0] = vertex.x;
-        vertices[index_indices * 3 + 1] = vertex.y;
-        vertices[index_indices * 3 + 2] = vertex.z;
+        vertices[index_indices* 3 + 0] = vertex.x;
+        vertices[index_indices* 3 + 1] = vertex.y;
+        vertices[index_indices* 3 + 2] = vertex.z;
 
         // Copy color
-        colors[index_indices * 4 + 0] = color.r;
-        colors[index_indices * 4 + 1] = color.g;
-        colors[index_indices * 4 + 2] = color.b;
-        colors[index_indices * 4 + 3] = color.a;
+        colors[index_indices* 4 + 0] = color.r;
+        colors[index_indices* 4 + 1] = color.g;
+        colors[index_indices* 4 + 2] = color.b;
+        colors[index_indices* 4 + 3] = color.a;
 
+        var tIdx = face.tIndices[k];
+
+        if (tIdx >= 0) {
+         
+          var texCoord = this.textures[tIdx];
+         
+          texCoords[index_indices*2 + 0] = texCoord.u;
+          texCoords[index_indices*2 + 1] = texCoord.v;
+          console.log(texCoords);
+        }
+        //console.log(texCoords);
         // Copy normal
         var nIdx = face.nIndices[k];
 
         if (nIdx >= 0) {
           var normal = this.normals[nIdx];
-          normals[nIdx * 3 + 0] = normal.x;
-          normals[nIdx * 3 + 1] = normal.y;
-          normals[nIdx * 3 + 2] = normal.z;
+          normals[index_indices * 3 + 0] = normal.x;
+          normals[index_indices * 3 + 1] = normal.y;
+          normals[index_indices * 3 + 2] = normal.z;
         } else {
-          normals[nIdx * 3 + 0] = faceNormal.x;
-          normals[nIdx * 3 + 1] = faceNormal.y;
-          normals[nIdx * 3 + 2] = faceNormal.z;
+          normals[index_indices * 3 + 0] = faceNormal.x;
+          normals[index_indices * 3 + 1] = faceNormal.y;
+          normals[index_indices * 3 + 2] = faceNormal.z;
         }
 
-        var tIdx = face.tIndices[k];
-        // console.log(tIdx);
-
-        if (tIdx >= 0 && tIdx < this.textures.length) {
-          //console.log(tIdx);
-          var texCoord = this.textures[tIdx];
-          //console.log(texCoord);
-          texCoords[index_indices * 2 + 0] = texCoord.u;
-          texCoords[index_indices * 2 + 1] = texCoord.v;
-        }
-        //console.log(texCoords);
         index_indices++;
       }
+
     }
   }
 
