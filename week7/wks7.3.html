@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <script id="vertex-shader" type="x-shader/x-vertex">
+    attribute vec4 a_position;
+    varying vec4 pos;
+    attribute vec4 a_color;
+    uniform mat4 PLoc;
+    uniform mat4 VLoc;
+    uniform mat4 MLoc;
+    uniform mat3 NLoc;
+    uniform mat4 TLoc; //meaning the texture matrix i use for the quad
+    varying vec4 vTexCoord;
+    uniform vec3 eye_position;
+    varying vec4 eye;
+    varying vec4 directionIncidence;
+    attribute vec4 vNormal;
+    varying vec4 normal;
+
+    void
+    main()
+    {
+        vec4 pos = (MLoc*a_position);
+        vec4 at = MLoc*vec4(0.0,0.0,0.0,0.0);
+
+        gl_Position = PLoc*VLoc*pos;
+
+        vTexCoord = TLoc * a_position;
+
+        eye = vec4(eye_position,1.0);
+
+        normal = vNormal;
+            }
+  </script>
+
+  <script id="fragment-shader" type="x-shader/x-fragment">
+    precision mediump float;
+    uniform samplerCube texMap;
+    varying vec4 vTexCoord;
+    uniform int reflective;
+    varying vec4 directionIncidence;
+    varying vec4 normal;
+    varying vec4 eye;
+
+    void
+    main()
+
+    {
+      vec4 directionIncidence = vTexCoord - eye;
+      vec3 reflectionDirection = reflective == 1 ? reflect(directionIncidence.xyz, vTexCoord.xyz) : vTexCoord.xyz;
+
+       gl_FragColor = textureCube(texMap,reflectionDirection);
+
+    }
+  </script>
+  <head>
+    <p></p>
+    <button id="Button1" class="style">Increase Subdivisions</button>
+    <button id="Button2" class="style">Decrease Subdivisions</button>
+    <button id="Button3" class="style">Rotate View</button>
+
+    <p></p>
+    <style>
+      .style {
+        display: none;
+      }
+    </style>
+  </head>
+  <script type="text/javascript" src="wks7.3.js"></script>
+  <script type="text/javascript" src="../webgl-utils.js"></script>
+  <script type="text/javascript" src="../MV.js"></script>
+  <script type="text/javascript" src="../initShaders.js"></script>
+
+  <body>
+    <canvas id="canvas" width="512" height="512"></canvas>
+  </body>
+</html>
