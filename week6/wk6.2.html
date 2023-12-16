@@ -50,6 +50,10 @@
       <option value="choice5">Nearest MipMap Linear</option>
       <option value="choice6">Linear MipMap Linear</option>
     </select>
+    <p>The choice of gl.NEAREST can results in a pixelated appearance.</p>
+  
+    <p>gl.LINEAR provides more smooth translation between texels than the nearest option but it still doesn't produce the best results.</p>
     
+    <p>gl.NEAREST_MIPMAP_NEAREST and gl.LINEAR_MIPMAP_NEAREST result in sharper transitions, while gl.NEAREST_MIPMAP_LINEAR and gl.LINEAR_MIPMAP_LINEAR provide smoother transitions between mipmap levels.</p> 
   </body>
 </html>

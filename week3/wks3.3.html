@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <h1>Part 1: </h1>
+    <p> Projection Matrix
+        View Matrix
+    </p>
+   
+    <h1>Part2: </h1>
+    <p>Projection Matrix Translation Matrix View Matrix</p>
+    <p>tMatrix = translate(dx, dy, -1.0)</p>
+    <p>We also change the View matrix adjusting the eye variable 
+        <br>
+        eye = vec3(
+            radius * Math.sin(theta) * Math.cos(phi),
+            radius * Math.sin(theta) * Math.sin(phi),
+            radius * Math.cos(theta)
+          );
+    </p>
+<h2>One Point Perspective:   </h2>
+    <p>
+        dx = -0.5;
+        dy = -0.5;
+        theta = 0;
+        phi = 0;
+    </p>
+   
+    <h2>Two Point Perspective:  </h2>
+    <p>
+        dx = 0.0;
+        dy = -0.5;
+        theta = 45 * (Math.PI / 180);
+        phi = 0;
+    </p>
+    
+    <h2>Three Point Perspective:  </h2>
+    <p>
+        dx = 0.0;
+        dy = 0.0;
+        theta = 45 * (Math.PI / 180);
+        phi = 45 * (Math.PI / 180);
+    </p>
+    
+
+</body>
+
+</html>

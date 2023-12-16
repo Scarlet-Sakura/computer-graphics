@@ -87,7 +87,7 @@ window.onload = function init() {
   gl.texParameteri(
     gl.TEXTURE_2D,
     gl.TEXTURE_MAG_FILTER,
-    gl.LINEAR_MIPMAP_LINEAR
+    gl.LINEAR
   );
   gl.texParameteri(
     gl.TEXTURE_2D,
