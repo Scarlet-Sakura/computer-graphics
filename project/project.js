@@ -19,7 +19,7 @@ window.onload = function init() {
   gl.program = initShaders(gl, "vertex-shader", "fragment-shader");
 
   gl.useProgram(gl.program);
-  var model = initObject(gl, "cupcake.obj", 0.8);
+  var model = initObject(gl, "test5.obj", 0.8);
   lightPos = gl.getUniformLocation(gl.program, "lightPos");
   Le = gl.getUniformLocation(gl.program, "Le");
   ka = gl.getUniformLocation(gl.program, "ka");
@@ -121,9 +121,9 @@ window.onload = function init() {
     // Acquire the vertex coordinates and colors from OBJ file
     var drawingInfo = objDoc.getDrawingInfo();
     //taking the mmaterial
-  
+
     console.log(objDoc.mtls);
-    
+
     var k_s = objDoc.mtls[0].KsMaterials[0].color;
     var k_a = objDoc.mtls[0].KaMaterials[0].color;
 
@@ -132,7 +132,7 @@ window.onload = function init() {
 
     gl.uniform4fv(ka, flatten(ambientColor));
     gl.uniform4fv(ks, flatten(specularColor));
-    
+
     // Write data into the buffer object
     gl.bindBuffer(gl.ARRAY_BUFFER, model.vertexBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, drawingInfo.vertices, gl.STATIC_DRAW);
@@ -189,35 +189,54 @@ window.onload = function init() {
   var perspectiveMatrix = gl.getUniformLocation(gl.program, "u_Perspective");
   gl.uniformMatrix4fv(perspectiveMatrix, false, flatten(P));
 
-  var image = document.getElementById("potion");
-  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+  var flavorDropdown = document.getElementById("flavorDropdown");
+  flavorDropdown.addEventListener("change", function () {
+    var selectedFlavor = flavorDropdown.value;
+    updateTexture(selectedFlavor);
+  });
 
-  var texture = gl.createTexture();
-  gl.bindTexture(gl.TEXTURE_2D, texture);
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+  var toppingDropdown = document.getElementById("toppingDropdown");
+  toppingDropdown.addEventListener("change", function () {
+    var selectedTopping = toppingDropdown.value;
+    if (flavorDropdown.value == "chocolate") {
+      updateTexture("chocolate" + selectedTopping);
+    } else {
+      updateTexture("vanilla" + selectedTopping);
+    }
+  });
+  //initialize
+  updateTexture(flavorDropdown.value);
 
-  gl.generateMipmap(gl.TEXTURE_2D);
+  function updateTexture(flavor) {
+    var imageElement = document.getElementById(flavor + "Img");
+    var texture = gl.createTexture();
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 
-  var texMapLoc = gl.getUniformLocation(gl.program, "texMap");
-  gl.uniform1i(texMapLoc, 0); // 0 is the texture unit you're using
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texImage2D(
+      gl.TEXTURE_2D,
+      0,
+      gl.RGBA,
+      gl.RGBA,
+      gl.UNSIGNED_BYTE,
+      imageElement
+    );
 
-  // Check if the image is a power of 2 in both dimensions.
-  if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
-    // Yes, it's a power of 2. Generate mips.
-    gl.generateMipmap(gl.TEXTURE_2D);
-  } else {
-    // No, it's not a power of 2. Turn off mips and set wrapping to clamp to edge
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    // Set texture parameters (modify as needed)
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+
+    // Optionally generate mipmaps (if the image size is a power of 2)
+    if (isPowerOf2(imageElement.width) && isPowerOf2(imageElement.height)) {
+      gl.generateMipmap(gl.TEXTURE_2D);
+    } else {
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    }
+    var texMapLoc = gl.getUniformLocation(gl.program, "texMap");
+    gl.uniform1i(texMapLoc, 0); // Set the texture unit to use (0 in this case)
   }
 
-  gl.texParameteri(
-    gl.TEXTURE_2D,
-    gl.TEXTURE_MIN_FILTER,
-    gl.NEAREST_MIPMAP_NEAREST
-  );
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
   var rotate = true;
   render(gl, model);
 
@@ -238,50 +257,9 @@ window.onload = function init() {
   }
   tick();
 
-  x_axis.addEventListener("input", updateObjectPosition);
-
-  y_axis.addEventListener("input", updateObjectPosition);
-
-  z_axis.addEventListener("input", updateObjectPosition);
-
   toggleRotation.addEventListener("click", function (ev) {
     rotate = !rotate;
   });
-
-  // Function to update object position based on slider values
-  function updateObjectPosition() {
-    // Get slider values
-    const xValue = document.getElementById("x-slider").value;
-    const yValue = document.getElementById("y-slider").value;
-    const zValue = document.getElementById("z-slider").value;
-
-    document.getElementById("x-value").innerText = xValue;
-    document.getElementById("y-value").innerText = yValue;
-    document.getElementById("z-value").innerText = zValue;
-    console.log(xValue);
-    updateMatrices(xValue, yValue, zValue);
-    render(gl, model);
-
-    // Update object position based on slider values
-    // Replace the following line with your actual code to update object position
-    console.log(
-      `Update object position: X=${xValue}, Y=${yValue}, Z=${zValue}`
-    );
-  }
-
-  function updateMatrices(x, y, z) {
-    T = translate(x, y, z);
-    M = mat4();
-
-    T = mult(Ry, T);
-    console.log(T);
-    M = mult(M, T);
-    M = mult(M, Ry);
-
-    gl.uniformMatrix4fv(MLoc, false, flatten(M));
-
-    gl.uniformMatrix4fv(translationMatrix, false, flatten(T));
-  }
 
   function render(gl, model) {
     if (!g_drawingInfo && g_objDoc && g_objDoc.isMTLComplete()) {

@@ -63,7 +63,7 @@
       vec4 ambient = Le*ka;
       fColor = ambient+ specular;
       fColor.a = v_color.a;
-  
+
       gl_FragColor = texture2D(texMap, vTexCoord);
     }
   </script>
@@ -75,45 +75,31 @@
   <script type="text/javascript" src="myParser.js"></script>
   <body>
     <canvas id="canvas" width="512" height="512"></canvas>
+    <br />
     <label for="flavor">Choose a flavor:</label>
-    <select id="flavor" name="flavor">
-      <option value="vanilla">Vanilla</option>
+    <select id="flavorDropdown" name="flavor">
+      <option value="vanilla" selected>Vanilla</option>
       <option value="chocolate">Chocolate</option>
     </select>
-    <div id="container">
-      <div>
-        <label for="x-slider">X-Axis: <span id="x-value">0</span></label>
-        <input
-          type="range"
-          id="x-slider"
-          min="-1"
-          max="1"
-          value="0"
-          step="0.1"
-        />
+    <br />
+    <label for="topping">Choose a topping:</label>
+    <select id="toppingDropdown" name="topping">
+      <option value="VanillaTop">Vanilla</option>
+      <option value="ChocolateTop" selected>Chocolate</option>
+      <option value="StrawberryTop">Strawberry</option>
+    </select>
 
-        <label for="y-slider">Y-Axis: <span id="y-value">0</span></label>
-        <input
-          type="range"
-          id="y-slider"
-          min="-1"
-          max="1"
-          value="0.0"
-          step="0.1"
-        />
-
-        <label for="z-slider">Z-Axis: <span id="z-value">0</span></label>
-        <input
-          type="range"
-          id="z-slider"
-          min="-1"
-          max="1"
-          value="0"
-          step="0.1"
-        />
-      </div>
     </div>
+    <br>
+    
     <button id="toggleRotation">Toggle Rotation</button>
-    <img id="potion" src="chocolate.png" hidden />
+    <img id="vanillaImg" src="test5.png" hidden />
+    <img id="chocolateImg" src="test6.png" hidden />
+    <img id="chocolateChocolateTopImg" src="test10.png" hidden />
+    <img id="vanillaVanillaTopImg" src="test9.png" hidden />
+    <img id="vanillaChocolateTopImg" src="test5.png" hidden />
+    <img id="vanillaStrawberryTopImg" src="test8.png" hidden />
+    <img id="chocolateVanillaTopImg" src="test6.png" hidden />
+    <img id="chocolateStrawberryTopImg" src="test7.png" hidden />
   </body>
 </html>
