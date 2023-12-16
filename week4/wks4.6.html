@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <h2>1. What is the difference between Phong shading and Phong lightining?</h2>
+    <p>
+        <b>Phong shading</b> introduces interpolating normals across each polygon. After
+        having the normal at each point, we make independent shading calculations.
+        It is a model applied per fragment.
+        <br>
+        <br>
+        <b>Phong lighting</b> refers to the reflection model that works on the vertices and 
+        simulates the interaction of light with surfaces.
+    </p>
+    <h2>2. What is the difference between flat shading, Gouraud shading, and Phong 
+        shading? List pros and cons of each. Is Gouraud or Phong shading the best method for simulating highlights?
+    </h2>
+    <p>
+        <b>Flat Shading: </b> One light calculation per polygon, meaning the color is computed
+        once for each polygon and the entire polygon is drawn with the same color. Each rendered polygon
+        has a single normal vector that is used for shading.
+        <br>
+        It is less expensive to compute compared to other methods so it is suitable for using in applications
+        with performance constraints. 
+        As disadvantages, it gives  low-polygon models a faceted look.
+        <br>
+        <b>Phong Shading: </b> Uses interpolation shading, meaning the color is computed once per vertex using 
+        the normal of the vertex. The normals are interpolated between vertices, and lighting is calculated at a per-pixel-fragment level.
+        <br>
+        The results are realistic and it is more likely to capture specular highlights but it is
+        computationally expensive.
+        <br>
+        <b>Gouraud Shading: </b> Calculates the color at each vertex of a polygon using the its normal and then interpolates these colors across the surface.
+        It uses the interpolated colors to fill the polygon.
+        <br>
+        It offes smoother appearance than flat shading but it is more coputationally expensive. 
+        On the other side, is less expensive than Phong shading.
+    </p>
+    <p>Both Phong shading and Gouraud shading may offer specular highlights but the Phong shading 
+        is the best choice as it can produce high-quality realistic shading because of how it handles
+        interpolaration of normal vectors across the polygon. Gouraud on the other hand, may produce artifacts
+        on highlights.
+    </p>
+    <h2>3. What is the difference between a directional light and a point light?</h2>
+    <p>
+        Point light is located somewhere in space and sends light equally in all directions.
+        Whereas directional light does not have a specific location, the coordinates are irrelevant 
+        as it can be placed anywhere in space. It emits light in a specific direction.
+        <br>
+        Moreover, the distance of point light affects its intensity - it is decreased with the square distance 
+        from the source. On the other hand, directional light is positioned infenitely far away so the distance
+        is irrelevant.
+    </p>
+    <h2>4. Does the eye position influence the shading of an object in any way?</h2>
+    <p>
+        Generally, eye position does not influence the shading since it relies on vertex normals. 
+        Though the shading is also depending on the object-space coordinates so in that way eye position
+        may affect it when we have effects depending on the viewer's position.
+    </p>
+    <h2>5. What is the effect of setting the specular term to (0,0,0)?</h2>
+    <p>
+        It removes the reflection of light in the surface.
+    </p>
+    <h2>6. What is the effect of increasing the shininess exponent?</h2>
+    <p>
+        Higher shininnes result in a smaller and more concentrated highlights.
+    </p>
+    <h2>7. In what coordinate space did you compute the lighting?</h2>
+    <p>
+        In camera coordinates.
+    </p>
+</body>
+</html>
