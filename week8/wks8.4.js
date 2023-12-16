@@ -149,10 +149,10 @@ window.onload = function init() {
       }
     }
     gl.depthFunc(gl.GREATER);
-    test = 1.0;
+    
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-    gl.uniform1f(shadow, test);
+    gl.uniform1f(shadow, 0);
     // Model-view matrix for shadow then render
     V = mult(V, translate(light[0], light[1], light[2]));
     V = mult(V, m);
@@ -166,11 +166,10 @@ window.onload = function init() {
     gl.drawArrays(gl.TRIANGLE_FAN, 8, 4);
 
     console.log(rotation);
-    console.log(test);
     iniTextureColor(gl);
     gl.uniformMatrix4fv(VLoc, false, flatten(lookAt(eye, at, up)));
     gl.uniform1i(gl.getUniformLocation(program, "texMap"), 1);
-    gl.uniform1f(shadow, 0.0);
+    gl.uniform1f(shadow, 1);
     gl.depthFunc(gl.LESS);
     gl.drawArrays(gl.TRIANGLE_FAN, 4, 4);
     gl.drawArrays(gl.TRIANGLE_FAN, 8, 4);
