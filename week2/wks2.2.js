@@ -74,21 +74,26 @@ window.onload= function init(){
         });
     });
     
-    //event listener for clear backgrounf
+    //event listener for clear background
     //enable choice for clear
     var clearButton = document.getElementById("clearButton");
     clearButton.addEventListener("click",function(){
         var m = document.getElementById("mymenu");
         m.addEventListener("click", function() {
+            index = 0;
             switch(m.selectedIndex){
                 case 0:
-                    gl.clearColor(0.9,0.5,0.3,1.0);
+                    gl.clearColor(0.9,0.5,0.3,1.0);  
+                    gl.clear(gl.COLOR_BUFFER_BIT);                
                     break;
                 case 1:
-                    gl.clearColor(0.5,0.2,0.8,1.0);
+                    gl.clearColor(0.5,0.2,0.8,1.0);  
+                    gl.clear(gl.COLOR_BUFFER_BIT);                 
                     break;
                 case 2:
-                    gl.clearColor(0.1,0.7,0.4,1.0);        
+                    gl.clearColor(0.1,0.7,0.4,1.0);   
+                    gl.clear(gl.COLOR_BUFFER_BIT);
+                        
             }
     });
     });
@@ -100,7 +105,7 @@ window.onload= function init(){
 
         gl.clear(gl.COLOR_BUFFER_BIT);
         gl.drawArrays(gl.POINTS, 0, index);
-        window.requestAnimationFrame(render);   
+        //window.requestAnimationFrame(render);   
        
     }
     
